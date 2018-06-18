@@ -21,22 +21,12 @@ public class BatchGenJsonToString extends AnAction {
 
 
         VirtualFile[] virtualFiles = e.getData(CommonDataKeys.VIRTUAL_FILE_ARRAY);
-        System.out.println(virtualFiles.length);
-
         for (VirtualFile virtualFile : virtualFiles) {
-            System.out.println(virtualFile.getChildren());
-            VirtualFile[] virtualFiles1 = virtualFile.getChildren();
-            System.out.println(virtualFiles1.length);
-
             PsiFile psiFile = PsiManager.getInstance(e.getProject()).findFile(virtualFile);
-
             final PsiClass psiClass = PsiTreeUtil.findChildOfAnyType(psiFile.getOriginalElement(), PsiClass.class);
-
             new WriteCommandAction.Simple(psiClass.getProject(), psiClass.getContainingFile()) {
-
                 @Override
                 protected void run() throws Throwable {
-
                     //删除已存在的方法
                     //没有文档，经测试，猜测，第二个参数是表示查找范围是否包含父类
                     PsiMethod[] pms = psiClass.findMethodsByName("toString", false);
@@ -45,15 +35,10 @@ public class BatchGenJsonToString extends AnAction {
                             pm.delete();
                         }
                     }
-
                     generateToStringImpl(psiClass);
                 }
             }.execute();
-
-
         }
-
-
     }
 
 
