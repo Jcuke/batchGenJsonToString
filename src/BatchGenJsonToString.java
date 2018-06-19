@@ -50,6 +50,10 @@ public class BatchGenJsonToString extends AnAction {
         for (PsiField field : psiClass.getFields()) {
             String fieldText = field.getText();
             fieldText = fieldText.replaceAll("  ", "").trim();
+            if(fieldText.split(" ").length > 3){
+                //排除static final、serialVersionUID等特殊属性
+                continue;
+            }
             String fieldClassType = fieldText.split(" ")[1];
 
             boolean isNumberType = false;
